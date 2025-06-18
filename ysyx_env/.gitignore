@@ -22,4 +22,8 @@
 !prog/src/ysyx_hello
 !prog/src/ysyx_hello/*
 
+!prog
+!prog/src
+!prog/src/loader
+!prog/src/loader/*
 
