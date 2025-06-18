@@ -6,8 +6,8 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('--APP_NAME', type=str, default = 'ysyx_hello')
 parser.add_argument('--APP_TYPE', type=str, default = 'mem',
-                    choices=['flash', 'mem', 'psram'],
-                    help='Application type: flash, mem, psram')
+                    choices=['flash', 'mem', 'psram', 'sram'],
+                    help='Application type: flash, mem, psram, or sram')
 APP_NAME = parser.parse_args().APP_NAME
 APP_TYPE = parser.parse_args().APP_TYPE
 APP_ARCH = 'riscv64-mycpu'
@@ -123,6 +123,31 @@ elif APP_TYPE == 'psram':
               APP_ARCH + "\.bin/' " + "Makefile")
     os.system('make ARCH=' + APP_ARCH)
 
+elif APP_TYPE == 'sram':
+    print('sram type')
+    chg_ld_script(APP_TYPE)
+    chg_ld_addr('0x0F000000')
+    os.chdir(APP_NAME)
+    if APP_NAME != 'rtthread':
+        os.system('make ARCH=' + APP_ARCH + ' LOAD_TYPE=-DMEM_LOAD')
+        os.system('cp build/' + APP_ORG_BIN + ' ' + HOME_DIR + '/loader')
+
+    else:
+        # os.system('./cpu_test.py')
+        os.system('cp *.c rt-thread/bsp/qemu-riscv-virt64/applications/')
+        os.system('cp *.cc rt-thread/bsp/qemu-riscv-virt64/applications/')
+        os.system('cp *.h rt-thread/bsp/qemu-riscv-virt64/applications/')
+        os.chdir('rt-thread/bsp/qemu-riscv-virt64/')
+        os.system("sed -i 's/^FLASH = 1/FLASH = 0/' rtconfig.py")
+        os.system('scons')
+        os.system('cp rtthread.bin ' + HOME_DIR + '/loader/' + APP_ORG_BIN)
+
+    chg_ld_script('flash')
+    chg_ld_addr('0x30000000')
+    os.chdir(HOME_DIR + '/loader')
+    os.system("sed -i 's/^\(BIN_PATH\s\+=\s\+\)\(.\+\)/\\1" + APP_NAME + "-" +
+              APP_ARCH + "\.bin/' " + "Makefile")
+    os.system('make ARCH=' + APP_ARCH)
 
 
 if APP_NAME != 'rtthread' and APP_TYPE == 'flash':
@@ -130,4 +155,7 @@ if APP_NAME != 'rtthread' and APP_TYPE == 'flash':
 elif APP_TYPE == 'mem':
     copy_oper(APP_TYPE)
 elif APP_TYPE == 'psram':
+    copy_oper(APP_TYPE)
+elif APP_TYPE == 'sram':
+    print('sram not support copy_oper')
     copy_oper(APP_TYPE)

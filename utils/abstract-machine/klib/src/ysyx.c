@@ -172,228 +172,231 @@ void spi1_wr_dat(uint8_t dat) {
     ;
 }
 
-// // spi1_tft
-// void spi_tft_init() {
-//   printf("GPIO INIT:\n");
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-//              mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-//                  (uint32_t)(1 << 0)); // SCK
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-//              mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-//                  (uint32_t)(1 << 1)); // CS
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-//              mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-//                  (uint32_t)(1 << 2)); // MOSI
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-//              mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-//                  (uint32_t)(1 << 3)); //
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-//              mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-//                  (uint32_t)(1 << 4)); //
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-//              mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-//                  (uint32_t)(1 << 5)); //
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PINMUX_OFFSET,
-//              mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_PINMUX_OFFSET) |
-//                  0); // FUNC0
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PADDIR_OFFSET,
-//              mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_PADDIR_OFFSET) |
-//                  (uint32_t)(1 << 6)); // DC
-//   printf("GPIO_1_PADDIR: %08x\n",
-//          mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_PADDIR_OFFSET));
-//   printf("GPIO_1_IOFCFG: %08x\n",
-//          mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET));
-//   printf("GPIO_1_PINMUX: %08x\n",
-//          mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_PINMUX_OFFSET));
-//   printf("GPIO INIT DONE\n");
-//   printf("SPI INIT:\n");
-//   mmio_write(SPI1_BASE_ADDR + SPI1_REG_STATUS_OFFSET, (uint32_t)0b10000);
-//   mmio_write(SPI1_BASE_ADDR + SPI1_REG_STATUS_OFFSET, (uint32_t)0b00000);
-//   mmio_write(SPI1_BASE_ADDR + SPI1_REG_INTCFG_OFFSET, (uint32_t)0b00000);
-//   mmio_write(SPI1_BASE_ADDR + SPI1_REG_DUM_OFFSET, (uint32_t)0);
-//   mmio_write(SPI1_BASE_ADDR + SPI1_REG_CLKDIV_OFFSET,
-//              (uint32_t)3); // sck = apb_clk/2(div+1) 100MHz/2 = 50MHz
-//   printf("SPI1_STATUS: %08x\n",
-//          mmio_read(SPI1_BASE_ADDR + SPI1_REG_STATUS_OFFSET));
-//   printf("SPI1_CLKDIV: %08x\n",
-//          mmio_read(SPI1_BASE_ADDR + SPI1_REG_CLKDIV_OFFSET));
-//   printf("SPI1_INTCFG: %08x\n",
-//          mmio_read(SPI1_BASE_ADDR + SPI1_REG_INTCFG_OFFSET));
-//   printf("SPI1_DUM: %08x\n", mmio_read(SPI1_BASE_ADDR +
-//   SPI1_REG_DUM_OFFSET)); printf("SPI INIT DONE\n"); printf("tft init
-//   begin\n");
+void spi1_wr_dat16(uint16_t dat){
+  uint32_t wdat = ((uint32_t)dat) << 16;
+  SPI1_REG_LEN = 0x100000; // NOTE: 16bits
+  *((volatile uint8_t *)(SPI1_BASE_ADDR + SPI1_REG_TXFIFO_OFFSET + 2)) = wdat;
+  SPI1_REG_STATUS = 258;
+  while ((SPI1_REG_STATUS & 0xFFFF) != 1)
+    ;
+}
 
-//   delay_ms(500);
+// spi1_tft
+void spi_tft_init() {
+  printf("GPIO INIT:\n");
+  GPIO_1_REG_IOFCFG = GPIO_1_REG_IOFCFG | (1 << 0) | (1 << 1) | (1 << 2) |
+                      (1 << 3) | (1 << 4) | (1 << 5); 
+  GPIO_1_REG_PINMUX = GPIO_1_REG_PINMUX | 0; // FUNC0
+  GPIO_1_REG_PADDIR = GPIO_1_REG_PADDIR | (1 << 6); // DC
+  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
+  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
+  //                (uint32_t)(1 << 0)); // SCK
+  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
+  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
+  //                (uint32_t)(1 << 1)); // CS
+  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
+  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
+  //                (uint32_t)(1 << 2)); // MOSI
+  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
+  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
+  //                (uint32_t)(1 << 3)); //
+  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
+  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
+  //                (uint32_t)(1 << 4)); //
+  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
+  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
+  //                (uint32_t)(1 << 5)); //
+  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PINMUX_OFFSET,
+  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_PINMUX_OFFSET) |
+  //                0); // FUNC0
+  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PADDIR_OFFSET,
+  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_PADDIR_OFFSET) |
+  //                (uint32_t)(1 << 6)); // DC
+  printf("GPIO_1_PADDIR: %08x\n", GPIO_1_REG_PADDIR);
+  printf("GPIO_1_IOFCFG: %08x\n", GPIO_1_REG_IOFCFG);
+  printf("GPIO_1_PINMUX: %08x\n", GPIO_1_REG_PINMUX);
+  printf("GPIO INIT DONE\n");
+  printf("SPI INIT:\n");
+  SPI1_REG_STATUS = (uint32_t)0b10000;
+  SPI1_REG_STATUS = (uint32_t)0b00000;
+  SPI1_REG_INTCFG = (uint32_t)0b00000;
+  SPI1_REG_DUM = (uint32_t)0;
+  SPI1_REG_CLKDIV = (uint32_t)1; // sck = apb_clk/2(div+1) 100MHz/2 = 50MHz
+  printf("SPI1_STATUS: %08x\n", SPI1_REG_STATUS);
+  printf("SPI1_CLKDIV: %08x\n", SPI1_REG_CLKDIV);
+  printf("SPI1_INTCFG: %08x\n", SPI1_REG_INTCFG);
+  printf("SPI1_DUM: %08x\n", SPI1_REG_DUM); 
+  printf("SPI INIT DONE\n"); 
+  printf("tft init begin\n");
 
-//   printf("exit sleep\n");
-//   lcd_wr_cmd(0x11); // 睡眠退出
-//   delay_ms(500);
+  delay_ms(500);
 
-//   printf("exit sleep\n");
-//   // ST7735R 帧速率
-//   lcd_wr_cmd(0xB1);
-//   lcd_wr_data8(0x01);
-//   lcd_wr_data8(0x2C);
-//   lcd_wr_data8(0x2D);
-//   lcd_wr_cmd(0xB2);
-//   lcd_wr_data8(0x01);
-//   lcd_wr_data8(0x2C);
-//   lcd_wr_data8(0x2D);
-//   lcd_wr_cmd(0xB3);
-//   lcd_wr_data8(0x01);
-//   lcd_wr_data8(0x2C);
-//   lcd_wr_data8(0x2D);
-//   lcd_wr_data8(0x01);
-//   lcd_wr_data8(0x2C);
-//   lcd_wr_data8(0x2D);
-//   lcd_wr_cmd(0xB4); // 列反转
-//   lcd_wr_data8(0x07);
-//   printf("after frame rate init\n");
+  printf("exit sleep\n");
+  lcd_wr_cmd(0x11); // 睡眠退出
+  delay_ms(500);
 
-//   // ST7735R Power Sequence
-//   lcd_wr_cmd(0xC0);
-//   lcd_wr_data8(0xA2);
-//   lcd_wr_data8(0x02);
-//   lcd_wr_data8(0x84);
-//   lcd_wr_cmd(0xC1);
-//   lcd_wr_data8(0xC5);
-//   lcd_wr_cmd(0xC2);
-//   lcd_wr_data8(0x0A);
-//   lcd_wr_data8(0x00);
-//   lcd_wr_cmd(0xC3);
-//   lcd_wr_data8(0x8A);
-//   lcd_wr_data8(0x2A);
-//   lcd_wr_cmd(0xC4);
-//   lcd_wr_data8(0x8A);
-//   lcd_wr_data8(0xEE);
-//   lcd_wr_cmd(0xC5); // VCOM
-//   lcd_wr_data8(0x0E);
-//   lcd_wr_cmd(0x36); // MX,MY,RGB mode
-//   printf("after power sequence init\n");
+  printf("exit sleep\n");
+  // ST7735R 帧速率
+  lcd_wr_cmd(0xB1);
+  lcd_wr_data8(0x01);
+  lcd_wr_data8(0x2C);
+  lcd_wr_data8(0x2D);
+  lcd_wr_cmd(0xB2);
+  lcd_wr_data8(0x01);
+  lcd_wr_data8(0x2C);
+  lcd_wr_data8(0x2D);
+  lcd_wr_cmd(0xB3);
+  lcd_wr_data8(0x01);
+  lcd_wr_data8(0x2C);
+  lcd_wr_data8(0x2D);
+  lcd_wr_data8(0x01);
+  lcd_wr_data8(0x2C);
+  lcd_wr_data8(0x2D);
+  lcd_wr_cmd(0xB4); // 列反转
+  lcd_wr_data8(0x07);
+  printf("after frame rate init\n");
 
-//   switch (
-//       USE_HORIZONTAL) //
-//       显示的方向(竖屏:0,横屏:1,竖屏旋转180度:2,横屏旋转180度:3)
-//   {
-//   case 0:
-//     lcd_wr_data8(0xC8);
-//     break; // 竖屏
-//   case 1:
-//     lcd_wr_data8(0xA8);
-//     break; // 横屏
-//   case 2:
-//     lcd_wr_data8(0x08);
-//     break; // 竖屏翻转180度
-//   default:
-//     lcd_wr_data8(0x68);
-//     break; // 横屏翻转180度
-//   }
+  // ST7735R Power Sequence
+  lcd_wr_cmd(0xC0);
+  lcd_wr_data8(0xA2);
+  lcd_wr_data8(0x02);
+  lcd_wr_data8(0x84);
+  lcd_wr_cmd(0xC1);
+  lcd_wr_data8(0xC5);
+  lcd_wr_cmd(0xC2);
+  lcd_wr_data8(0x0A);
+  lcd_wr_data8(0x00);
+  lcd_wr_cmd(0xC3);
+  lcd_wr_data8(0x8A);
+  lcd_wr_data8(0x2A);
+  lcd_wr_cmd(0xC4);
+  lcd_wr_data8(0x8A);
+  lcd_wr_data8(0xEE);
+  lcd_wr_cmd(0xC5); // VCOM
+  lcd_wr_data8(0x0E);
+  lcd_wr_cmd(0x36); // MX,MY,RGB mode
+  printf("after power sequence init\n");
 
-//   // ST7735R Gamma Sequence
-//   lcd_wr_cmd(0xE0);
-//   lcd_wr_data8(0x0F);
-//   lcd_wr_data8(0x1A);
-//   lcd_wr_data8(0x0F);
-//   lcd_wr_data8(0x18);
-//   lcd_wr_data8(0x2F);
-//   lcd_wr_data8(0x28);
-//   lcd_wr_data8(0x20);
-//   lcd_wr_data8(0x22);
-//   lcd_wr_data8(0x1F);
-//   lcd_wr_data8(0x1B);
-//   lcd_wr_data8(0x23);
-//   lcd_wr_data8(0x37);
-//   lcd_wr_data8(0x00);
-//   lcd_wr_data8(0x07);
-//   lcd_wr_data8(0x02);
-//   lcd_wr_data8(0x10);
+  switch (USE_HORIZONTAL) //显示的方向(竖屏:0,横屏:1,竖屏旋转180度:2,横屏旋转180度:3)
+  {
+  case 0:
+    lcd_wr_data8(0xC8);
+    break; // 竖屏
+  case 1:
+    lcd_wr_data8(0xA8);
+    break; // 横屏
+  case 2:
+    lcd_wr_data8(0x08);
+    break; // 竖屏翻转180度
+  default:
+    lcd_wr_data8(0x68);
+    break; // 横屏翻转180度
+  }
 
-//   lcd_wr_cmd(0xE1);
-//   lcd_wr_data8(0x0F);
-//   lcd_wr_data8(0x1B);
-//   lcd_wr_data8(0x0F);
-//   lcd_wr_data8(0x17);
-//   lcd_wr_data8(0x33);
-//   lcd_wr_data8(0x2C);
-//   lcd_wr_data8(0x29);
-//   lcd_wr_data8(0x2E);
-//   lcd_wr_data8(0x30);
-//   lcd_wr_data8(0x30);
-//   lcd_wr_data8(0x39);
-//   lcd_wr_data8(0x3F);
-//   lcd_wr_data8(0x00);
-//   lcd_wr_data8(0x07);
-//   lcd_wr_data8(0x03);
-//   lcd_wr_data8(0x10);
-//   printf("after gamma sequence init\n");
+  // ST7735R Gamma Sequence
+  lcd_wr_cmd(0xE0);
+  lcd_wr_data8(0x0F);
+  lcd_wr_data8(0x1A);
+  lcd_wr_data8(0x0F);
+  lcd_wr_data8(0x18);
+  lcd_wr_data8(0x2F);
+  lcd_wr_data8(0x28);
+  lcd_wr_data8(0x20);
+  lcd_wr_data8(0x22);
+  lcd_wr_data8(0x1F);
+  lcd_wr_data8(0x1B);
+  lcd_wr_data8(0x23);
+  lcd_wr_data8(0x37);
+  lcd_wr_data8(0x00);
+  lcd_wr_data8(0x07);
+  lcd_wr_data8(0x02);
+  lcd_wr_data8(0x10);
 
-//   lcd_wr_cmd(0xF0); // 启动测试命令
-//   lcd_wr_data8(0x01);
-//   lcd_wr_cmd(0xF6); // 禁用ram省电模式
-//   lcd_wr_data8(0x00);
+  lcd_wr_cmd(0xE1);
+  lcd_wr_data8(0x0F);
+  lcd_wr_data8(0x1B);
+  lcd_wr_data8(0x0F);
+  lcd_wr_data8(0x17);
+  lcd_wr_data8(0x33);
+  lcd_wr_data8(0x2C);
+  lcd_wr_data8(0x29);
+  lcd_wr_data8(0x2E);
+  lcd_wr_data8(0x30);
+  lcd_wr_data8(0x30);
+  lcd_wr_data8(0x39);
+  lcd_wr_data8(0x3F);
+  lcd_wr_data8(0x00);
+  lcd_wr_data8(0x07);
+  lcd_wr_data8(0x03);
+  lcd_wr_data8(0x10);
+  printf("after gamma sequence init\n");
 
-//   lcd_wr_cmd(0x3A); // 65k mode
-//   lcd_wr_data8(0x05);
-//   lcd_wr_cmd(0x29); // 开启显示
-//   lcd_fill(0, 0, 128, 128, 0xFFFF);
-//   printf("TFT init done\n");
-// }
+  lcd_wr_cmd(0xF0); // 启动测试命令
+  lcd_wr_data8(0x01);
+  lcd_wr_cmd(0xF6); // 禁用ram省电模式
+  lcd_wr_data8(0x00);
 
-// void lcd_fill_bmp(const uint8_t *bmp, uint16_t x, uint16_t y, uint16_t w,
-//                   uint16_t h) {
-//   lcd_addr_set(x, y, x + w - 1, y + h - 1);
-//   for (uint16_t i = 0; i < h * w * 2; i++) {
-//     lcd_wr_data8(bmp[i]);
-//   }
-// }
+  lcd_wr_cmd(0x3A); // 65k mode
+  lcd_wr_data8(0x05);
+  lcd_wr_cmd(0x29); // 开启显示
+  lcd_fill(0, 0, 128, 128, 0xFFFF);
+  printf("TFT init done\n");
+}
 
-// void lcd_refresh(uint16_t *gdm, uint16_t x, uint16_t y, uint16_t w,
-//                  uint16_t h) {
-//   lcd_addr_set(x, y, x + w - 1, y + h - 1);
-//   for (uint16_t i = 0; i < h; i++) {
-//     for (uint16_t j = 0; j < w; j++) {
-//       lcd_wr_data8(gdm[i * 128 + j] >> 8);
-//       lcd_wr_data8(gdm[i * 128 + j]);
-//     }
-//   }
-// }
+void lcd_fill_bmp(const uint8_t *bmp, uint16_t x, uint16_t y, uint16_t w,
+                  uint16_t h) {
+  lcd_addr_set(x, y, x + w - 1, y + h - 1);
+  for (uint16_t i = 0; i < h * w * 2; i++) {
+    lcd_wr_data8(bmp[i]);
+  }
+}
 
-// void lcd_fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend,
-//               uint32_t color) {
-//   lcd_addr_set(xsta, ysta, xend - 1, yend - 1);
-//   for (uint16_t i = ysta; i < yend; ++i) {
-//     for (uint16_t j = xsta; j < xend; ++j) {
-//       lcd_wr_data8(color >> 8);
-//       lcd_wr_data8(color);
-//     }
-//   }
-// }
+void lcd_refresh(uint16_t *gdm, uint16_t x, uint16_t y, uint16_t w,
+                 uint16_t h) {
+  lcd_addr_set(x, y, x + w - 1, y + h - 1);
+  for (uint16_t i = 0; i < h; i++) {
+    for (uint16_t j = 0; j < w; j++) {
+      lcd_wr_data16(gdm[i * 128 + j]);
+    }
+  }
+}
 
-// #define LCD_X_OFFSET 2
-// #define LCD_Y_OFFSET 3
-// void lcd_addr_set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
-//   lcd_wr_cmd(0x2A);
-//   lcd_wr_data8(0x00);
-//   lcd_wr_data8(x1 + LCD_X_OFFSET);
-//   lcd_wr_data8(0x00);
-//   lcd_wr_data8(x2 + LCD_X_OFFSET);
-//   lcd_wr_cmd(0x2B);
-//   lcd_wr_data8(0x00);
-//   lcd_wr_data8(y1 + LCD_Y_OFFSET);
-//   lcd_wr_data8(0x00);
-//   lcd_wr_data8(y2 + LCD_Y_OFFSET);
-//   lcd_wr_cmd(0x2C);
-// }
+void lcd_fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend,
+              uint32_t color) {
+  lcd_addr_set(xsta, ysta, xend - 1, yend - 1);
+  for (uint16_t i = ysta; i < yend; ++i) {
+    for (uint16_t j = xsta; j < xend; ++j) {
+      lcd_wr_data16(color);
+    }
+  }
+}
 
-// void lcd_wr_cmd(uint8_t cmd) {
-//   lcd_dc_clr;
-//   spi1_wr_dat(cmd);
-// }
+#define LCD_X_OFFSET 2
+#define LCD_Y_OFFSET 3
+void lcd_addr_set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+  lcd_wr_cmd(0x2A);
+  lcd_wr_data16(x1 + LCD_X_OFFSET);
+  lcd_wr_data16(x2 + LCD_X_OFFSET);
+  lcd_wr_cmd(0x2B);
+  lcd_wr_data16(y1+ LCD_Y_OFFSET);
+  lcd_wr_data16(y2 + LCD_Y_OFFSET);
+  lcd_wr_cmd(0x2C);
+}
 
-// void lcd_wr_data8(uint8_t dat) {
-//   lcd_dc_set;
-//   spi1_wr_dat(dat);
-// }
+void lcd_wr_cmd(uint8_t cmd) {
+  lcd_dc_clr;
+  spi1_wr_dat(cmd);
+}
+
+void lcd_wr_data8(uint8_t dat) {
+  lcd_dc_set;
+  spi1_wr_dat(dat);
+}
+
+void lcd_wr_data16(uint16_t dat){
+  lcd_dc_set;
+  spi1_wr_dat16(dat);
+}
 
 // i2c
 void i2c_config() {

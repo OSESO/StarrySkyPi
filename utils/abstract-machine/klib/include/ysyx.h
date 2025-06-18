@@ -292,16 +292,17 @@ void delay_ms(uint32_t val);
 
 // SPI1 
 void spi1_wr_dat(uint8_t dat);
-
+void spi1_wr_dat16(uint16_t dat);
 // SPI_TFT_LCD
 #define LCD_W 128
 #define LCD_H 128
-#define lcd_dc_clr (mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PADOUT_OFFSET, 0x00 << 6))
-#define lcd_dc_set (mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PADOUT_OFFSET, 0x01 << 6))
+#define lcd_dc_clr (GPIO_1_REG_PADOUT = GPIO_1_REG_PADOUT & ~(0x01 << 6))
+#define lcd_dc_set (GPIO_1_REG_PADOUT = GPIO_1_REG_PADOUT | (0x01 << 6))
 #define USE_HORIZONTAL 0 // 0:竖屏 1:横屏 2:竖屏翻转180度 3:横屏翻转180度
 void spi_tft_init();
 void lcd_wr_cmd(uint8_t cmd);
 void lcd_wr_data8(uint8_t dat);
+void lcd_wr_data16(uint16_t dat);
 void lcd_addr_set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 void lcd_fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend,uint32_t color);
 void lcd_fill_bmp(const uint8_t *bmp, uint16_t x, uint16_t y, uint16_t w,uint16_t h);
