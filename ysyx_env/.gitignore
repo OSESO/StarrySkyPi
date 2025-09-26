@@ -27,3 +27,7 @@
 !prog/src/loader
 !prog/src/loader/*
 
+!prog
+!prog/src
+!prog/src/all_test
+!prog/src/all_test/*
