@@ -17,4 +17,4 @@
 
 1. 将klib相关文件加入到AM的klib中
 2. 配置AM_HOME环境变量
-3. 在ysyx_env/prog/src目录下运行编译脚本 run.py 即可 
+3. 在ysyx_env/prog/src目录下运行make脚本即可（使用make help获取编译格式） 
