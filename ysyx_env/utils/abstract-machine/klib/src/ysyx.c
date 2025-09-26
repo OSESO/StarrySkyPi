@@ -3,113 +3,8 @@
 #include "klib.h"
 #include "stdint.h"
 #include <stdint.h>
-#include <ysyx.h>
-
-// void core_init() {
-//   // GPIO_0
-//   mmio_write(GPIO_0_BASE_ADDR + GPIO_0_REG_PADDIR_OFFSET, 0x00000000);
-//   mmio_write(GPIO_0_BASE_ADDR + GPIO_0_REG_PADOUT_OFFSET, 0x00000000);
-//   mmio_write(GPIO_0_BASE_ADDR + GPIO_0_REG_INTEN_OFFSET, 0x00000000);
-//   mmio_write(GPIO_0_BASE_ADDR + GPIO_0_REG_INTTYPE0_OFFSET, 0x00000000);
-//   mmio_write(GPIO_0_BASE_ADDR + GPIO_0_REG_INTTYPE1_OFFSET, 0x00000000);
-//   mmio_write(GPIO_0_BASE_ADDR + GPIO_0_REG_INTSTAT_OFFSET, 0x00000000);
-//   mmio_write(GPIO_0_BASE_ADDR + GPIO_0_REG_IOFCFG_OFFSET, 0x00000000);
-//   mmio_write(GPIO_0_BASE_ADDR + GPIO_0_REG_PINMUX_OFFSET, 0x00000000);
-
-//   // GPIO_1
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PADDIR_OFFSET, 0x00000000);
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PADOUT_OFFSET, 0x00000000);
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_INTEN_OFFSET, 0x00000000);
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_INTTYPE0_OFFSET, 0x00000000);
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_INTTYPE1_OFFSET, 0x00000000);
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_INTSTAT_OFFSET, 0x00000000);
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET, 0x00000000);
-//   mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PINMUX_OFFSET, 0x00000000);
-
-//   // PWM_0
-//   mmio_write(PWM_0_BASE_ADDR + PWM_0_REG_CTRL_OFFSET, 0x00000000);
-//   mmio_write(PWM_0_BASE_ADDR + PWM_0_REG_PSCR_OFFSET, 0x00000002);
-//   mmio_write(PWM_0_BASE_ADDR + PWM_0_REG_CMP_OFFSET, 0x00000000);
-//   mmio_write(PWM_0_BASE_ADDR + PWM_0_REG_CR0_OFFSET, 0x00000000);
-//   mmio_write(PWM_0_BASE_ADDR + PWM_0_REG_CR1_OFFSET, 0x00000000);
-//   mmio_write(PWM_0_BASE_ADDR + PWM_0_REG_CR2_OFFSET, 0x00000000);
-//   mmio_write(PWM_0_BASE_ADDR + PWM_0_REG_CR3_OFFSET, 0x00000000);
-//   mmio_write(PWM_0_BASE_ADDR + PWM_0_REG_STAT_OFFSET, 0x00000000);
-
-//   // PWM_1
-//   mmio_write(PWM_1_BASE_ADDR + PWM_1_REG_CTRL_OFFSET, 0x00000000);
-//   mmio_write(PWM_1_BASE_ADDR + PWM_1_REG_PSCR_OFFSET, 0x00000002);
-//   mmio_write(PWM_1_BASE_ADDR + PWM_1_REG_CMP_OFFSET, 0x00000000);
-//   mmio_write(PWM_1_BASE_ADDR + PWM_1_REG_CR0_OFFSET, 0x00000000);
-//   mmio_write(PWM_1_BASE_ADDR + PWM_1_REG_CR1_OFFSET, 0x00000000);
-//   mmio_write(PWM_1_BASE_ADDR + PWM_1_REG_CR2_OFFSET, 0x00000000);
-//   mmio_write(PWM_1_BASE_ADDR + PWM_1_REG_CR3_OFFSET, 0x00000000);
-//   mmio_write(PWM_1_BASE_ADDR + PWM_1_REG_STAT_OFFSET, 0x00000000);
-
-//   // PWM_2
-//   mmio_write(PWM_2_BASE_ADDR + PWM_2_REG_CTRL_OFFSET, 0x00000000);
-//   mmio_write(PWM_2_BASE_ADDR + PWM_2_REG_PSCR_OFFSET, 0x00000002);
-//   mmio_write(PWM_2_BASE_ADDR + PWM_2_REG_CMP_OFFSET, 0x00000000);
-//   mmio_write(PWM_2_BASE_ADDR + PWM_2_REG_CR0_OFFSET, 0x00000000);
-//   mmio_write(PWM_2_BASE_ADDR + PWM_2_REG_CR1_OFFSET, 0x00000000);
-//   mmio_write(PWM_2_BASE_ADDR + PWM_2_REG_CR2_OFFSET, 0x00000000);
-//   mmio_write(PWM_2_BASE_ADDR + PWM_2_REG_CR3_OFFSET, 0x00000000);
-//   mmio_write(PWM_2_BASE_ADDR + PWM_2_REG_STAT_OFFSET, 0x00000000);
-
-//   // RCU
-//   // mmio_write(RCU_BASE_ADDR + RCU_REG_CTRL_OFFSET, 0x00000000);
-//   // mmio_write(RCU_BASE_ADDR + RCU_REG_RDIV_OFFSET, 0x00000000);
-//   // mmio_write(RCU_BASE_ADDR + RCU_REG_STAT_OFFSET, 0x00000000);
-
-//   // WDG
-//   mmio_write(WDG_BASE_ADDR + WDG_REG_CTRL_OFFSET, 0x00000000);
-//   mmio_write(WDG_BASE_ADDR + WDG_REG_PSCR_OFFSET, 0x00000002);
-//   // mmio_write(WDG_BASE_ADDR + WDG_REG_CNT_OFFSET, 0x00000000);
-//   mmio_write(WDG_BASE_ADDR + WDG_REG_CMP_OFFSET, 0x00000000);
-//   mmio_write(WDG_BASE_ADDR + WDG_REG_STAT_OFFSET, 0x00000000);
-//   mmio_write(WDG_BASE_ADDR + WDG_REG_KEY_OFFSET, 0x00000000);
-//   mmio_write(WDG_BASE_ADDR + WDG_REG_FEED_OFFSET, 0x00000000);
-
-//   // I2C
-//   I2C_REG_CTRL = 0x00;
-//   I2C_REG_PSCRL = 0xFF;
-//   I2C_REG_PSCRH = 0x00;
-//   I2C_REG_TXR = 0x00;
-//   I2C_REG_RXR = 0x00;
-//   I2C_REG_CMD = 0x00;
-//   I2C_REG_SR = 0x00;
-
-//   // RTC
-//   mmio_write(RTC_BASE_ADDR + RTC_REG_CTRL_OFFSET, 0x00000000);
-//   mmio_write(RTC_BASE_ADDR + RTC_REG_PSCR_OFFSET, 0x00000002);
-//   mmio_write(RTC_BASE_ADDR + RTC_REG_ALRM_OFFSET, 0x00000000);
-//   mmio_write(RTC_BASE_ADDR + RTC_REG_ISTA_OFFSET, 0x00000000);
-//   mmio_write(RTC_BASE_ADDR + RTC_REG_SSTA_OFFSET, 0x00000000);
-
-//   // CLINT
-//   mmio_write(CLINT_BASE_ADDR + CLINT_REG_MSIP_OFFSET, 0x00000000);
-//   mmio_write(CLINT_BASE_ADDR + CLINT_REG_MTIMEL_OFFSET, 0x00000000);
-//   mmio_write(CLINT_BASE_ADDR + CLINT_REG_MTIMEH_OFFSET, 0x00000000);
-//   mmio_write(CLINT_BASE_ADDR + CLINT_REG_MTIMECMPL_OFFSET, 0xFFFFFFFF);
-//   mmio_write(CLINT_BASE_ADDR + CLINT_REG_MTIMECMPH_OFFSET, 0xFFFFFFFF);
-
-//   // PS2
-//   mmio_write(PS2_BASE_ADDR + PS2_REG_CTRL_OFFSET, 0x00000000);
-//   mmio_write(PS2_BASE_ADDR + PS2_REG_DATA_OFFSET, 0x00000000);
-//   mmio_write(PS2_BASE_ADDR + PS2_REG_STAT_OFFSET, 0x00000000);
-
-//   // // SPI1
-//   // mmio_write(SPI1_BASE_ADDR + SPI1_REG_STATUS_OFFSET, 0x00000000);
-//   // mmio_write(SPI1_BASE_ADDR + SPI1_REG_CLKDIV_OFFSET, 0x00000000);
-//   // mmio_write(SPI1_BASE_ADDR + SPI1_REG_CMD_OFFSET, 0x00000000);
-//   // mmio_write(SPI1_BASE_ADDR + SPI1_REG_ADR_OFFSET, 0x00000000);
-//   // mmio_write(SPI1_BASE_ADDR + SPI1_REG_LEN_OFFSET, 0x00000000);
-//   // mmio_write(SPI1_BASE_ADDR + SPI1_REG_DUM_OFFSET, 0x00000000);
-//   // mmio_write(SPI1_BASE_ADDR + SPI1_REG_TXFIFO_OFFSET, 0x00000000);
-//   // mmio_write(SPI1_BASE_ADDR + SPI1_REG_RXFIFO_OFFSET, 0x00000000);
-//   // mmio_write(SPI1_BASE_ADDR + SPI1_REG_INTCFG_OFFSET, 0x00000000);
-//   // mmio_write(SPI1_BASE_ADDR + SPI1_REG_INTSTA_OFFSET, 0x00000000);
-// }
+#include <stdio.h>
+#include "../include/ysyx.h"
 
 void info_id() {
   uint32_t mvendorid;
@@ -140,6 +35,212 @@ void info_id() {
   printf("\033[34m*********************************\n\n\033[0m");
 }
 
+void ARCH_Info(){
+  printf("SYS: %x IDL: %x IDH: %x\n", ARCHINFO_REG_SYS, ARCHINFO_REG_IDL, ARCHINFO_REG_IDH);
+}
+void ARCH_SetSys(uint32_t val){
+  ARCHINFO_REG_SYS = val;
+}
+void ARCH_SetIdl(uint32_t val){
+  ARCHINFO_REG_IDL = val;
+}
+void ARCH_SetIdh(uint32_t val){
+  ARCHINFO_REG_IDH = val;
+}
+
+void RNG_SetCtrl(uint32_t val){
+  RNG_REG_CTRL = val;
+}
+void RNG_SetSeed(uint32_t val){
+  RNG_REG_SEED = val;
+}
+uint32_t RNG_GetVal(){
+  return RNG_REG_VAL;
+}
+
+void CRC_SetCtrl(uint32_t val){
+  CRC_REG_CTRL = val;
+}
+void CRC_SetInit(uint32_t val){
+  CRC_REG_INIT = val;
+}
+void CRC_SetXorV(uint32_t val){
+  CRC_REG_XORV = val;
+}
+void CRC_SetData(uint32_t val){
+  CRC_REG_DATA = val;
+}
+uint32_t CRC_GetVal(){
+  return CRC_REG_DATA;
+}
+
+void WDG_SetCtrl(uint32_t val){
+  WDG_REG_CTRL = val;
+}
+
+void WDG_SetPrescale(uint32_t val){
+  WDG_REG_PSCR = val;
+}
+
+void WDG_SetCmp(uint32_t val){
+  WDG_REG_CMP = val;
+}
+
+void WDG_Feed(uint32_t val){
+  WDG_REG_FEED = val;
+}
+
+void WDG_SetKey(uint32_t val){
+  WDG_REG_KEY = val;
+}
+
+uint32_t WDG_GetStat(){
+  return WDG_REG_STAT;
+}
+
+void RCU_SetCtrl(uint32_t val){
+  RCU_REG_CTRL = val;
+}
+void RCU_SetRdiv(uint32_t val){
+  RCU_REG_RDIV = val;
+}
+uint32_t RCU_GetStat(){
+  return RCU_REG_STAT;
+}
+
+void RTC_SetCtrl(uint32_t val){
+  RTC_REG_CTRL = val;
+}
+void RTC_SetPrescale(uint32_t val){
+  RTC_REG_PSCR = val - 1;
+}
+void RTC_SetCnt(uint32_t val){
+  RTC_REG_CNT = val;
+}
+uint32_t RTC_GetCnt(){
+  return RTC_REG_CNT;
+}
+void RTC_SetAlrm(uint32_t val){
+  RTC_REG_ALRM = val;
+}
+uint32_t RTC_GetIsta(){
+  return RTC_REG_ISTA;
+}
+
+void GPIO_SetDir(uint32_t gpio, uint32_t dir){
+  if(gpio == GPIO_0){
+      GPIO_0_REG_PADDIR = dir;
+  }else if(gpio == GPIO_1){
+      GPIO_1_REG_PADDIR = dir;
+  }
+}
+
+void GPIO_SetDir_Num(uint32_t gpio, uint32_t pin, uint32_t dir){
+  if(gpio == GPIO_0){
+    if(dir == GPIO_OUT){
+      GPIO_0_REG_PADDIR = GPIO_0_REG_PADDIR | (1 << pin);
+    }else{
+      GPIO_0_REG_PADDIR = GPIO_0_REG_PADDIR & ~(1 << pin);
+    }
+  }else if(gpio == GPIO_1){
+    if(dir == GPIO_OUT){
+      GPIO_1_REG_PADDIR = GPIO_1_REG_PADDIR | (1 << pin);
+    }else{
+      GPIO_1_REG_PADDIR = GPIO_1_REG_PADDIR & ~(1 << pin);
+    }
+  }
+}
+
+void GPIO_SetVal(uint32_t gpio, uint32_t val){
+  if(gpio == GPIO_0){
+      GPIO_0_REG_PADOUT = val;
+  }else if(gpio == GPIO_1){
+      GPIO_1_REG_PADOUT = val;
+  }
+}
+
+void GPIO_SetVal_Num(uint32_t gpio, uint32_t pin, uint32_t val){
+  if(gpio == GPIO_0){
+    if(val == 1){
+      GPIO_0_REG_PADOUT = GPIO_0_REG_PADOUT | (1 << pin);
+    }else{
+      GPIO_0_REG_PADOUT = GPIO_0_REG_PADOUT & ~(1 << pin);
+    }
+  }else if(gpio == GPIO_1){
+    if(val == 1){
+      GPIO_1_REG_PADOUT = GPIO_1_REG_PADOUT | (1 << pin);
+    }else{
+      GPIO_1_REG_PADOUT = GPIO_1_REG_PADOUT & ~(1 << pin);
+    }
+  }
+}
+
+void GPIO_SetFCFG(uint32_t gpio, uint32_t val){
+  if(gpio == GPIO_0){
+      GPIO_0_REG_IOFCFG = val;
+  }else if(gpio == GPIO_1){
+      GPIO_1_REG_IOFCFG = val;
+  }
+}
+
+void GPIO_SetFCFG_Num(uint32_t gpio, uint32_t pin, uint32_t val){
+  if(gpio == GPIO_0){
+    if(val == 1){
+      GPIO_0_REG_IOFCFG = GPIO_0_REG_IOFCFG | (1 << pin);
+    }else{
+      GPIO_0_REG_IOFCFG = GPIO_0_REG_IOFCFG & ~(1 << pin);
+    }
+  }else if(gpio == GPIO_1){
+    if(val == 1){
+      GPIO_1_REG_IOFCFG = GPIO_1_REG_IOFCFG | (1 << pin);
+    }else{
+      GPIO_1_REG_IOFCFG = GPIO_1_REG_IOFCFG & ~(1 << pin);
+    }
+  }
+}
+
+void GPIO_SetMUX(uint32_t gpio, uint32_t val){
+  if(gpio == GPIO_0){
+      GPIO_0_REG_PINMUX = val;
+  }else if(gpio == GPIO_1){
+      GPIO_1_REG_PINMUX = val;
+  }
+}
+
+void GPIO_SetMUX_Num(uint32_t gpio, uint32_t pin, uint32_t val){
+  if(gpio == GPIO_0){
+    if(val == 1){
+      GPIO_0_REG_PINMUX = GPIO_0_REG_PINMUX | (1 << pin);
+    }else{
+      GPIO_0_REG_PINMUX = GPIO_0_REG_PINMUX & ~(1 << pin);
+    }
+  }else if(gpio == GPIO_1){
+    if(val == 1){
+      GPIO_1_REG_PINMUX = GPIO_1_REG_PINMUX | (1 << pin);
+    }else{
+      GPIO_1_REG_PINMUX = GPIO_1_REG_PINMUX & ~(1 << pin);
+    }
+  }
+}
+
+uint32_t GPIO_GetVal(uint32_t gpio){
+  if(gpio == GPIO_0){
+      return GPIO_0_REG_PADIN;
+  }else if(gpio == GPIO_1){
+      return GPIO_1_REG_PADIN;
+  }
+  return 0;
+}
+
+uint32_t GPIO_GetVal_Num(uint32_t gpio, uint32_t pin){
+  if(gpio == GPIO_0){
+      return (GPIO_0_REG_PADIN >> pin) & 0x1;
+  }else if(gpio == GPIO_1){
+      return (GPIO_1_REG_PADIN >> pin) & 0x1;
+  }
+  return 0;
+}
+
 void timer_init(uint32_t div, uint32_t cmp) {
   printf("TIMER INIT:\n");
   TIMER_0_REG_CTRL = (uint32_t)0x0; // disable timer
@@ -162,20 +263,106 @@ void delay_ms(uint32_t val) {
   TIMER_0_REG_CTRL = (uint32_t)0xD;
 }
 
-// spi1
-void spi1_wr_dat(uint8_t dat) {
-  SPI1_REG_LEN = 0x80000;
-  *((volatile uint8_t *)(SPI1_BASE_ADDR + SPI1_REG_TXFIFO_OFFSET + 3)) = (uint8_t)dat;
-  *((volatile uint8_t *)(SPI1_BASE_ADDR + SPI1_REG_STATUS_OFFSET + 1)) = 1;
-  *((volatile uint8_t *)(SPI1_BASE_ADDR + SPI1_REG_STATUS_OFFSET + 0)) = 2;
-  while ((SPI1_REG_STATUS & 0xFFFF) != 1)
-    ;
+
+void PWM_Init(uint32_t pwm, uint32_t prescale, uint32_t cmp){
+  if(pwm == PWM_0){
+    PWM_0_REG_CTRL = (uint32_t)0;
+    PWM_0_REG_PSCR = prescale - 1; // 100M / prescale
+    PWM_0_REG_CMP = cmp - 1;       // freq = 100M / prescale / cmp
+    printf("PWM_0_REG_CTRL: %d PWM_0_REG_PSCR: %d PWM_0_REG_CMP: %d\n", PWM_0_REG_CTRL, PWM_0_REG_PSCR, PWM_0_REG_CMP);
+  }else if(pwm == PWM_1){
+    PWM_1_REG_CTRL = (uint32_t)0;
+    PWM_1_REG_PSCR = prescale - 1; // 100M / prescale
+    PWM_1_REG_CMP = cmp - 1;       // freq = 100M / prescale / cmp
+    printf("PWM_1_REG_CTRL: %d PWM_1_REG_PSCR: %d PWM_1_REG_CMP: %d\n", PWM_1_REG_CTRL, PWM_1_REG_PSCR, PWM_1_REG_CMP);
+  }else if(pwm == PWM_2){
+    PWM_2_REG_CTRL = (uint32_t)0;
+    PWM_2_REG_PSCR = prescale - 1; // 100M / prescale
+    PWM_2_REG_CMP = cmp - 1;       // freq = 100M / prescale / cmp
+    printf("PWM_2_REG_CTRL: %d PWM_2_REG_PSCR: %d PWM_2_REG_CMP: %d\n", PWM_2_REG_CTRL, PWM_2_REG_PSCR, PWM_2_REG_CMP);
+  }
+}
+void PWM_SetCtr(uint32_t pwm, uint32_t val){
+  if(pwm == PWM_0){
+    PWM_0_REG_CTRL = val;
+  }else if(pwm == PWM_1){
+    PWM_1_REG_CTRL = val;
+  }else if(pwm == PWM_2){
+    PWM_2_REG_CTRL = val;
+  }
+}
+void PWM_SetPrescale(uint32_t pwm, uint32_t val){
+  if(pwm == PWM_0){
+    PWM_0_REG_PSCR = val - 1;
+  }else if(pwm == PWM_1){
+    PWM_1_REG_PSCR = val - 1;
+  }else if(pwm == PWM_2){
+    PWM_2_REG_PSCR = val - 1;
+  }
+}
+void PWM_SetCmp(uint32_t pwm, uint32_t val){
+  if(pwm == PWM_0){
+    PWM_0_REG_CMP = val - 1;
+  }else if(pwm == PWM_1){
+    PWM_1_REG_CMP = val - 1;
+  }else if(pwm == PWM_2){
+    PWM_2_REG_CMP = val - 1;
+  }
+}
+void PWM_SetDuty(uint32_t pwm, uint32_t channel, uint32_t duty){
+  if(pwm == PWM_0){
+    if(channel == PWM_CHANAL_0){
+      PWM_0_REG_CR0 = duty;
+    }else if(channel == PWM_CHANAL_1){
+      PWM_0_REG_CR1 = duty;
+    }else if(channel == PWM_CHANAL_2){
+      PWM_0_REG_CR2 = duty;
+    }else if(channel == PWM_CHANAL_3){
+      PWM_0_REG_CR3 = duty;
+    }
+  }else if(pwm == PWM_1){
+    if(channel == PWM_CHANAL_0){
+      PWM_1_REG_CR0 = duty;
+    }else if(channel == PWM_CHANAL_1){
+      PWM_1_REG_CR1 = duty;
+    }else if(channel == PWM_CHANAL_2){
+      PWM_1_REG_CR2 = duty;
+    }else if(channel == PWM_CHANAL_3){
+      PWM_1_REG_CR3 = duty;
+    }
+  }else if(pwm == PWM_2){
+    if(channel == PWM_CHANAL_0){
+      PWM_2_REG_CR0 = duty;
+    }else if(channel == PWM_CHANAL_1){
+      PWM_2_REG_CR1 = duty;
+    }else if(channel == PWM_CHANAL_2){
+      PWM_2_REG_CR2 = duty;
+    }else if(channel == PWM_CHANAL_3){
+      PWM_2_REG_CR3 = duty;
+    }
+  }
 }
 
-void spi1_wr_dat16(uint16_t dat){
-  uint32_t wdat = ((uint32_t)dat) << 16;
-  SPI1_REG_LEN = 0x100000; // NOTE: 16bits
-  *((volatile uint8_t *)(SPI1_BASE_ADDR + SPI1_REG_TXFIFO_OFFSET + 2)) = wdat;
+// spi1
+
+void SPI1_Init(){
+  printf("SPI INIT:\n");
+  SPI1_REG_STATUS = (uint32_t)0b10000;
+  SPI1_REG_STATUS = (uint32_t)0b00000;
+  SPI1_REG_INTCFG = (uint32_t)0b00000;
+  SPI1_REG_DUM = (uint32_t)0;
+  SPI1_REG_CLKDIV = (uint32_t)4; // sck = apb_clk/2(div+1) 100MHz/2 = 50MHz
+  printf("SPI1_STATUS: %08x\n", SPI1_REG_STATUS);
+  printf("SPI1_CLKDIV: %08x\n", SPI1_REG_CLKDIV);
+  printf("SPI1_INTCFG: %08x\n", SPI1_REG_INTCFG);
+  printf("SPI1_DUM: %08x\n", SPI1_REG_DUM); 
+  printf("SPI INIT DONE\n"); 
+}
+
+void spi1_wr_dat(uint8_t dat) {
+  uint32_t wdat = ((uint32_t)dat) << 24;
+  SPI1_REG_LEN = 0x80000;
+  SPI1_REG_TXFIFO = wdat;
   SPI1_REG_STATUS = 258;
   while ((SPI1_REG_STATUS & 0xFFFF) != 1)
     ;
@@ -184,49 +371,20 @@ void spi1_wr_dat16(uint16_t dat){
 // spi1_tft
 void spi_tft_init() {
   printf("GPIO INIT:\n");
-  GPIO_1_REG_IOFCFG = GPIO_1_REG_IOFCFG | (1 << 0) | (1 << 1) | (1 << 2) |
-                      (1 << 3) | (1 << 4) | (1 << 5); 
-  GPIO_1_REG_PINMUX = GPIO_1_REG_PINMUX | 0; // FUNC0
-  GPIO_1_REG_PADDIR = GPIO_1_REG_PADDIR | (1 << 6); // DC
-  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-  //                (uint32_t)(1 << 0)); // SCK
-  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-  //                (uint32_t)(1 << 1)); // CS
-  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-  //                (uint32_t)(1 << 2)); // MOSI
-  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-  //                (uint32_t)(1 << 3)); //
-  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-  //                (uint32_t)(1 << 4)); //
-  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET,
-  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_IOFCFG_OFFSET) |
-  //                (uint32_t)(1 << 5)); //
-  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PINMUX_OFFSET,
-  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_PINMUX_OFFSET) |
-  //                0); // FUNC0
-  // mmio_write(GPIO_1_BASE_ADDR + GPIO_1_REG_PADDIR_OFFSET,
-  //            mmio_read(GPIO_1_BASE_ADDR + GPIO_1_REG_PADDIR_OFFSET) |
-  //                (uint32_t)(1 << 6)); // DC
+  GPIO_1_REG_IOFCFG |= (uint32_t)(1 << 0);
+  GPIO_1_REG_IOFCFG |= (uint32_t)(1 << 1);
+  GPIO_1_REG_IOFCFG |= (uint32_t)(1 << 2);
+  GPIO_1_REG_IOFCFG |= (uint32_t)(1 << 3);
+  GPIO_1_REG_IOFCFG |= (uint32_t)(1 << 4);
+  GPIO_1_REG_IOFCFG |= (uint32_t)(1 << 5);
+  GPIO_1_REG_PINMUX = 0; // FUNC0
+  GPIO_1_REG_PADDIR = (uint32_t)(1 << 6);
+
   printf("GPIO_1_PADDIR: %08x\n", GPIO_1_REG_PADDIR);
   printf("GPIO_1_IOFCFG: %08x\n", GPIO_1_REG_IOFCFG);
   printf("GPIO_1_PINMUX: %08x\n", GPIO_1_REG_PINMUX);
   printf("GPIO INIT DONE\n");
-  printf("SPI INIT:\n");
-  SPI1_REG_STATUS = (uint32_t)0b10000;
-  SPI1_REG_STATUS = (uint32_t)0b00000;
-  SPI1_REG_INTCFG = (uint32_t)0b00000;
-  SPI1_REG_DUM = (uint32_t)0;
-  SPI1_REG_CLKDIV = (uint32_t)1; // sck = apb_clk/2(div+1) 100MHz/2 = 50MHz
-  printf("SPI1_STATUS: %08x\n", SPI1_REG_STATUS);
-  printf("SPI1_CLKDIV: %08x\n", SPI1_REG_CLKDIV);
-  printf("SPI1_INTCFG: %08x\n", SPI1_REG_INTCFG);
-  printf("SPI1_DUM: %08x\n", SPI1_REG_DUM); 
-  printf("SPI INIT DONE\n"); 
+  SPI1_Init();
   printf("tft init begin\n");
 
   delay_ms(500);
@@ -361,12 +519,66 @@ void lcd_refresh(uint16_t *gdm, uint16_t x, uint16_t y, uint16_t w,
   }
 }
 
+void lcd_wr_data32x32(uint32_t dat1, uint32_t dat2, uint32_t dat3,
+                      uint32_t dat4, uint32_t dat5, uint32_t dat6,
+                      uint32_t dat7, uint32_t dat8, uint32_t dat9,
+                      uint32_t dat10, uint32_t dat11, uint32_t dat12,
+                      uint32_t dat13, uint32_t dat14, uint32_t dat15,
+                      uint32_t dat16, uint32_t dat17, uint32_t dat18,
+                      uint32_t dat19, uint32_t dat20, uint32_t dat21,
+                      uint32_t dat22, uint32_t dat23, uint32_t dat24,
+                      uint32_t dat25, uint32_t dat26, uint32_t dat27,
+                      uint32_t dat28, uint32_t dat29, uint32_t dat30,
+                      uint32_t dat31, uint32_t dat32) {
+  lcd_dc_set;
+
+  SPI1_REG_LEN = 0x4000000; // NOTE: 32x32bits
+  SPI1_REG_TXFIFO = dat1;
+  SPI1_REG_TXFIFO = dat2;
+  SPI1_REG_TXFIFO = dat3;
+  SPI1_REG_TXFIFO = dat4;
+  SPI1_REG_TXFIFO = dat5;
+  SPI1_REG_TXFIFO = dat6;
+  SPI1_REG_TXFIFO = dat7;
+  SPI1_REG_TXFIFO = dat8;
+  SPI1_REG_TXFIFO = dat9;
+  SPI1_REG_TXFIFO = dat10;
+  SPI1_REG_TXFIFO = dat11;
+  SPI1_REG_TXFIFO = dat12;
+  SPI1_REG_TXFIFO = dat13;
+  SPI1_REG_TXFIFO = dat14;
+  SPI1_REG_TXFIFO = dat15;
+  SPI1_REG_TXFIFO = dat16;
+  SPI1_REG_TXFIFO = dat17;
+  SPI1_REG_TXFIFO = dat18;
+  SPI1_REG_TXFIFO = dat19;
+  SPI1_REG_TXFIFO = dat20;
+  SPI1_REG_TXFIFO = dat21;
+  SPI1_REG_TXFIFO = dat22;
+  SPI1_REG_TXFIFO = dat23;
+  SPI1_REG_TXFIFO = dat24;
+  SPI1_REG_TXFIFO = dat25;
+  SPI1_REG_TXFIFO = dat26;
+  SPI1_REG_TXFIFO = dat27;
+  SPI1_REG_TXFIFO = dat28;
+  SPI1_REG_TXFIFO = dat29;
+  SPI1_REG_TXFIFO = dat30;
+  SPI1_REG_TXFIFO = dat31;
+  SPI1_REG_TXFIFO = dat32;
+  SPI1_REG_STATUS = 258;
+  while ((SPI1_REG_STATUS & 0xFFFF) != 1)
+    ;
+}
+
 void lcd_fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend,
               uint32_t color) {
   lcd_addr_set(xsta, ysta, xend - 1, yend - 1);
   for (uint16_t i = ysta; i < yend; ++i) {
-    for (uint16_t j = xsta; j < xend; ++j) {
-      lcd_wr_data16(color);
+    for (uint16_t j = xsta; j < xend; j += 64) {
+      lcd_wr_data32x32(color, color, color, color, color, color, color, color,
+                       color, color, color, color, color, color, color, color,
+                       color, color, color, color, color, color, color, color,
+                       color, color, color, color, color, color, color, color);
     }
   }
 }
@@ -395,14 +607,29 @@ void lcd_wr_data8(uint8_t dat) {
 
 void lcd_wr_data16(uint16_t dat){
   lcd_dc_set;
-  spi1_wr_dat16(dat);
+
+  uint32_t wdat = ((uint32_t)dat) << 16;
+  SPI1_REG_LEN = 0x100000;
+  SPI1_REG_TXFIFO = wdat;
+  SPI1_REG_STATUS = 258;
+  while ((SPI1_REG_STATUS & 0xFFFF) != 1)
+    ;
+}
+
+//ps2
+
+void PS2_SetCtrl(uint32_t val){
+  PS2_REG_CTRL = val;
+}
+uint32_t PS2_GetData(){
+  return PS2_REG_DATA;
 }
 
 // i2c
 void i2c_config() {
   GPIO_0_REG_IOFCFG = GPIO_0_REG_IOFCFG | (1 << 29);
   GPIO_0_REG_IOFCFG = GPIO_0_REG_IOFCFG | (1 << 30);
-  GPIO_0_REG_PINMUX = GPIO_0_REG_PINMUX_OFFSET | (1 << 29) | (1 << 30);
+  GPIO_0_REG_PINMUX = GPIO_0_REG_PINMUX & ~(1 << 29) & ~(1 << 30);
   printf("GPIO_0_PADDIR: %08x\n", GPIO_0_REG_IOFCFG);
   printf("GPIO_0_PINMUX: %08x\n", GPIO_0_REG_PINMUX);
   I2C_REG_CTRL = (uint8_t)0;

@@ -4,7 +4,80 @@
 #include "stdint.h"
 #include <stdint.h>
 
+/****************************************************************************/
+/*                              ARCHINFO                                    */
+/****************************************************************************/
+void ARCH_Info();
+void ARCH_SetSys(uint32_t val);
+void ARCH_SetIdl(uint32_t val);
+void ARCH_SetIdh(uint32_t val);
+#define ARCHINFO_BASE_ADDR 0x10017000
+#define ARCHINFO_REG_SYS_OFFSET 0
+#define ARCHINFO_REG_IDL_OFFSET 4
+#define ARCHINFO_REG_IDH_OFFSET 8
 
+#define ARCHINFO_REG_SYS   *((volatile uint32_t *)(ARCHINFO_BASE_ADDR + ARCHINFO_REG_SYS_OFFSET))
+#define ARCHINFO_REG_IDL   *((volatile uint32_t *)(ARCHINFO_BASE_ADDR + ARCHINFO_REG_IDL_OFFSET))
+#define ARCHINFO_REG_IDH   *((volatile uint32_t *)(ARCHINFO_BASE_ADDR + ARCHINFO_REG_IDH_OFFSET))
+
+/****************************************************************************/
+/*                              RNG                                         */
+/****************************************************************************/
+
+void RNG_SetCtrl(uint32_t val);
+void RNG_SetSeed(uint32_t val);
+uint32_t RNG_GetVal();
+
+#define RNG_BASE_ADDR 0x10014000
+
+#define RNG_REG_CTRL_OFFSET 0
+#define RNG_REG_SEED_OFFSET 4
+#define RNG_REG_VAL_OFFSET  8
+#define RNG_REG_CTRL  *((volatile uint32_t *)(RNG_BASE_ADDR + RNG_REG_CTRL_OFFSET))
+#define RNG_REG_SEED  *((volatile uint32_t *)(RNG_BASE_ADDR + RNG_REG_SEED_OFFSET))
+#define RNG_REG_VAL   *((volatile uint32_t *)(RNG_BASE_ADDR + RNG_REG_VAL_OFFSET))
+
+/****************************************************************************/
+/*                              CRC                                         */
+/****************************************************************************/
+
+void CRC_SetCtrl(uint32_t val);
+void CRC_SetInit(uint32_t val);
+void CRC_SetXorV(uint32_t val);
+void CRC_SetData(uint32_t val);
+uint32_t CRC_GetVal();
+
+#define CRC_BASE_ADDR 0x10015000
+
+#define CRC_REG_CTRL_OFFSET 0
+#define CRC_REG_INIT_OFFSET 4
+#define CRC_REG_XORV_OFFSET 8
+#define CRC_REG_DATA_OFFSET 12
+#define CRC_REG_STAT_OFFSET 16
+
+#define CRC_REG_CTRL  *((volatile uint32_t *)(CRC_BASE_ADDR + CRC_REG_CTRL_OFFSET))
+#define CRC_REG_INIT  *((volatile uint32_t *)(CRC_BASE_ADDR + CRC_REG_INIT_OFFSET))
+#define CRC_REG_XORV  *((volatile uint32_t *)(CRC_BASE_ADDR + CRC_REG_XORV_OFFSET))
+#define CRC_REG_DATA  *((volatile uint32_t *)(CRC_BASE_ADDR + CRC_REG_DATA_OFFSET))
+#define CRC_REG_STAT  *((volatile uint32_t *)(CRC_BASE_ADDR + CRC_REG_STAT_OFFSET))
+/****************************************************************************/
+/*                              GPIO                                        */
+/****************************************************************************/
+#define GPIO_0 (0)
+#define GPIO_1 (1)
+#define GPIO_IN  (0)
+#define GPIO_OUT (1)
+
+void GPIO_SetDir(uint32_t gpio, uint32_t dir);
+void GPIO_SetDir_Num(uint32_t gpio, uint32_t pin, uint32_t dir);
+void GPIO_SetVal(uint32_t gpio, uint32_t val);
+void GPIO_SetVal_Num(uint32_t gpio, uint32_t pin, uint32_t val);
+void GPIO_SetFCFG(uint32_t gpio, uint32_t val);
+void GPIO_SetFCFG_Num(uint32_t gpio, uint32_t pin, uint32_t val);
+void GPIO_SetMUX(uint32_t gpio, uint32_t val);
+void GPIO_SetMUX_Num(uint32_t gpio, uint32_t pin, uint32_t val);
+uint32_t GPIO_GetVal(uint32_t gpio);
+uint32_t GPIO_GetVal_Num(uint32_t gpio, uint32_t pin);
 /****************************************************************************/
 /*                              GPIO_0                                      */
 /****************************************************************************/
@@ -58,6 +131,13 @@
 /****************************************************************************/
 /*                                 WDG                                      */
 /****************************************************************************/
+void WDG_SetCtrl(uint32_t val);
+void WDG_SetPrescale(uint32_t val);
+void WDG_SetCmp(uint32_t val);
+void WDG_Feed(uint32_t val);
+void WDG_SetKey(uint32_t val);
+uint32_t WDG_GetStat();
+
 #define WDG_BASE_ADDR       (uint32_t)0x10008000
 #define WDG_MAGIC_NUM       (uint32_t)0x5F3759DF
 #define WDG_REG_CTRL_OFFSET 0
@@ -80,6 +160,10 @@
 /****************************************************************************/
 /*                                 TIMER_0                                  */
 /****************************************************************************/
+
+void timer_init(uint32_t div, uint32_t cmp);
+void delay_ms(uint32_t val);
+
 #define TIMER_0_BASE_ADDR       (uint32_t)0x10009000
 #define TIMER_0_REG_CTRL_OFFSET 0
 #define TIMER_0_REG_PSCR_OFFSET 4
@@ -93,10 +177,30 @@
 #define TIMER_0_REG_CMP  *((volatile uint32_t *)(TIMER_0_BASE_ADDR + TIMER_0_REG_CMP_OFFSET))
 #define TIMER_0_REG_STAT *((volatile uint32_t *)(TIMER_0_BASE_ADDR + TIMER_0_REG_STAT_OFFSET))
 
+/****************************************************************************/
+/*                                  PWM                                     */
+/****************************************************************************/
+#define PWM_0 (0)
+#define PWM_1 (1)
+#define PWM_2 (2)
+
+#define PWM_CHANAL_0 (0)
+#define PWM_CHANAL_1 (1)
+#define PWM_CHANAL_2 (2)
+#define PWM_CHANAL_3 (3)
+
+void PWM_Init(uint32_t pwm, uint32_t prescale, uint32_t cmp);
+void PWM_SetCtr(uint32_t pwm, uint32_t val);
+void PWM_SetPrescale(uint32_t pwm, uint32_t val);
+void PWM_SetCmp(uint32_t pwm, uint32_t val);
+void PWM_SetDuty(uint32_t pwm, uint32_t channel, uint32_t duty);
 
 /****************************************************************************/
 /*                                  PWM_0                                   */
 /****************************************************************************/
+
+
+
 #define PWM_0_BASE_ADDR       (uint32_t)0x10004000
 #define PWM_0_REG_CTRL_OFFSET 0
 #define PWM_0_REG_PSCR_OFFSET 4
@@ -193,6 +297,11 @@
 /****************************************************************************/
 /*                                   RCU                                    */
 /****************************************************************************/
+
+void RCU_SetCtrl(uint32_t val);
+void RCU_SetRdiv(uint32_t val);
+uint32_t RCU_GetStat();
+
 #define RCU_BASE_ADDR       (uint32_t)0x10018000
 #define RCU_REG_CTRL_OFFSET 0
 #define RCU_REG_RDIV_OFFSET 4
@@ -206,6 +315,13 @@
 /****************************************************************************/
 /*                                   RTC                                    */
 /****************************************************************************/
+void RTC_SetCtrl(uint32_t val);
+void RTC_SetPrescale(uint32_t val);
+void RTC_SetCnt(uint32_t val);
+uint32_t RTC_GetCnt();
+void RTC_SetAlrm(uint32_t val);
+uint32_t RTC_GetIsta();
+
 #define RTC_BASE_ADDR       (uint32_t)0x10007000
 #define RTC_REG_CTRL_OFFSET 0
 #define RTC_REG_PSCR_OFFSET 4
@@ -242,6 +358,8 @@
 /****************************************************************************/
 /*                                   PS2                                    */
 /****************************************************************************/
+void PS2_SetCtrl(uint32_t val);
+uint32_t PS2_GetData();
 #define PS2_BASE_ADDR       (uint32_t)0x10013000 // GPIO1 FUNC0 12, 13
 #define PS2_REG_CTRL_OFFSET 0
 #define PS2_REG_DATA_OFFSET 4
@@ -255,6 +373,10 @@
 /****************************************************************************/
 /*                                   SPI1                                   */
 /****************************************************************************/
+void SPI1_Init();
+void spi1_wr_dat(uint8_t dat);
+void spi1_wr_dat16(uint16_t dat);
+
 #define SPI1_BASE_ADDR         (uint32_t)0x10010000
 #define SPI1_REG_STATUS_OFFSET 0
 #define SPI1_REG_CLKDIV_OFFSET 4
@@ -286,13 +408,6 @@
 // System
 void info_id();
 
-// Timer
-void timer_init(uint32_t div, uint32_t cmp);
-void delay_ms(uint32_t val);
-
-// SPI1 
-void spi1_wr_dat(uint8_t dat);
-void spi1_wr_dat16(uint16_t dat);
 // SPI_TFT_LCD
 #define LCD_W 128
 #define LCD_H 128

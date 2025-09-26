@@ -1,6 +1,7 @@
 #include <am.h>
 #include <klib.h>
 #include <klib-macros.h>
+#include <stdint.h>
 
 // #define LD_YSYX2
 
@@ -11,13 +12,20 @@ extern uint32_t _stack_top;
 extern uint32_t _stack_pointer;
 
 #define PROG_SIZE ((&app_end) - (&app_start))
-// #define APP_PMEM 0x80000000 // mem
-#define APP_PMEM 0x0F000000 // psram
+
+#define APP_PMEM 0x80000000 // mem
+// #define APP_PMEM 0x0F000000 // sram
 
 int main()
 {
     uint32_t *prog = (uint32_t *)&app_start;
     uint32_t *pmem = (uint32_t *)&(_appmem_start);
+    // uintptr_t APP_PMEM;
+    // if(*(uint32_t*)&_stack_top == 0x80000000){
+    //     APP_PMEM=0x80000000; // mem
+    // }else{
+    //     APP_PMEM=0x0F000000; // sram
+    // }
     putstr("Loading program of size: ");
     printf("%d bytes, expect 128 \'#\'\n", (uint32_t)PROG_SIZE * sizeof(uint32_t));
     putstr("Loading.....\n");

@@ -10,3 +10,6 @@
     - python 编译环境
     - 外设IP驱动库
     - ysyx_hello 示例代码
+
+# 勘误
+欢迎大家提交issue和PR
